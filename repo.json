@@ -1,11 +1,11 @@
 [
     {
         "Author": "SheepGoMeh",
-        "Name": "Visibility+",
+        "Name": "VisibilityPlus",
         "Punchline": "Visibility plugin with duty support",
         "Description": "Visibility plugin with duty support",
         "Changelog": "Initial publish",
-        "InternalName": "Visibility+",
+        "InternalName": "VisibilityPlus",
         "AssemblyVersion": "1.1.8.3",
         "RepoUrl": "https://github.com/frieren14/VisibilityPlugin",
         "ApplicableVersion": "any",

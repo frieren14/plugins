@@ -1,0 +1,106 @@
+name: Update repo.json
+
+on:
+  schedule:
+    - cron: "0 */5 * * *"
+  workflow_dispatch:
+
+jobs: #TODO just use dispatch instead of this polling thing when i find the energy
+  update-repo-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Fetch and update from repositories
+        run: |
+          REPOSITORIES=(
+            "frieren14/VisibilityPlugin"
+          )
+
+          UPDATED_ENTRIES=()
+
+          for REPO in "${REPOSITORIES[@]}"; do
+            echo "Processing repository: $REPO"
+
+            # Fetch latest release information
+            LATEST_RELEASE=$(curl -s "https://api.github.com/repos/$REPO/releases/latest")
+            MANIFEST_URL=$(echo "$LATEST_RELEASE" | jq -r '.assets[] | select(.name == "manifest.json") | .browser_download_url')
+
+            if [ -z "$MANIFEST_URL" ]; then
+              echo "Warning: manifest.json not found for repository $REPO, skipping..."
+              continue
+            fi
+
+            # Download the manifest.json
+            curl -s -o manifest.json "$MANIFEST_URL"
+            MANIFEST=$(cat manifest.json)
+
+            # Extract fields from manifest.json
+            AUTHOR=$(echo "$MANIFEST" | jq -r '.Author')
+            NAME=$(echo "$MANIFEST" | jq -r '.Name')
+            INTERNAL_NAME=$(echo "$MANIFEST" | jq -r '.InternalName')
+            VERSION=$(echo "$MANIFEST" | jq -r '.AssemblyVersion')
+            DESCRIPTION=$(echo "$MANIFEST" | jq -r '.Description')
+            REPO_URL=$(echo "$MANIFEST" | jq -r '.RepoUrl')
+            API_LEVEL=$(echo "$MANIFEST" | jq -r '.DalamudApiLevel')
+            APPLICABLE_VERSION=$(echo "$MANIFEST" | jq -r '.ApplicableVersion')
+            TAGS=$(echo "$MANIFEST" | jq -c '.Tags')
+            PUNCHLINE=$(echo "$MANIFEST" | jq -r '.Punchline')
+
+            DOWNLOAD_BASE=$(echo "$LATEST_RELEASE" | jq -r '.html_url')
+            DOWNLOAD_LINK="${DOWNLOAD_BASE}/latest.zip"
+
+            # Create updated entry
+            UPDATED_ENTRY=$(jq -n --arg author "$AUTHOR" \
+                                 --arg name "$NAME" \
+                                 --arg internalName "$INTERNAL_NAME" \
+                                 --arg version "$VERSION" \
+                                 --arg description "$DESCRIPTION" \
+                                 --arg repoUrl "$REPO_URL" \
+                                 --arg apiLevel "$API_LEVEL" \
+                                 --arg applicableVersion "$APPLICABLE_VERSION" \
+                                 --argjson tags "$TAGS" \
+                                 --arg punchline "$PUNCHLINE" \
+                                 --arg downloadLink "$DOWNLOAD_LINK" \
+                                 --arg repo "$REPO" \
+                                 '{
+                                   Author: $author,
+                                   Name: $name,
+                                   Punchline: $punchline,
+                                   Description: $description,
+                                   Changelog: "Initial publish",
+                                   InternalName: $internalName,
+                                   AssemblyVersion: $version,
+                                   RepoUrl: $repoUrl,
+                                   ApplicableVersion: $applicableVersion,
+                                   CategoryTags: $tags,
+                                   DalamudApiLevel: ($apiLevel | tonumber),
+                                   IsHide: "False",
+                                   IconUrl: ("https://raw.githubusercontent.com/" + $repo + "/refs/heads/master/res/icon.png"),
+                                   ImageUrls: [("https://raw.githubusercontent.com/" + $repo + "/refs/heads/master/res/visibility.png")],
+                                   DownloadLinkInstall: $downloadLink,
+                                   DownloadLinkUpdate: $downloadLink,
+                                   DownloadLinkTesting: $downloadLink
+                                 }')
+
+            UPDATED_ENTRIES+=("$UPDATED_ENTRY")
+          done
+
+          # Convert array to JSON array and write to repo.json
+          jq -n '$ARGS.positional' --args "${UPDATED_ENTRIES[@]}" > repo.tmp.json
+          mv repo.tmp.json repo.json
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add repo.json
+          git commit -m "Update repo.json"
+          git push

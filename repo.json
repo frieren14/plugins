@@ -1,23 +1,23 @@
 {
-        "Author": "SheepGoMeh",
-        "Name": "Visibility+",
-        "Punchline": "Visibility plugin with duty support",
-        "Description": "Visibility plugin with duty support",
-        "Changelog": "Initial publish",
-        "InternalName": "Visibility",
-        "AssemblyVersion": "1.1.8.3",
-        "RepoUrl": "https://github.com/frieren14/VisibilityPlugin",
-        "ApplicableVersion": "any",
-        "CategoryTags": [
-            "utility"
-        ],
-        "DalamudApiLevel": 12,
-        "IsHide": "False",
-        "IconUrl": "https://raw.githubusercontent.com/frieren14/VisibilityPlugin/refs/heads/master/res/icon.png",
-        "ImageUrls": [
-            "https://raw.githubusercontent.com/frieren14/VisibilityPlugin/refs/heads/master/res/visibility.png"
-        "DownloadLinkInstall": "https://github.com/frieren14/VisibilityPlugin/releases/download/v0.1/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/frieren14/VisibilityPlugin/releases/download/v0.1/latest.zip",
-        "DownloadLinkTesting": "https://github.com/frieren14/VisibilityPlugin/releases/download/v0.1/latest.zip",
-        ],
-    },
+    "Author": "SheepGoMeh",
+    "Name": "Visibility+",
+    "Punchline": "Visibility plugin with duty support",
+    "Description": "Visibility plugin with duty support",
+    "Changelog": "Initial publish",
+    "InternalName": "Visibility",
+    "AssemblyVersion": "1.1.8.3",
+    "RepoUrl": "https://github.com/frieren14/VisibilityPlugin",
+    "ApplicableVersion": "any",
+    "CategoryTags": [
+        "utility"
+    ],
+    "DalamudApiLevel": 12,
+    "IsHide": "False",
+    "IconUrl": "https://raw.githubusercontent.com/frieren14/VisibilityPlugin/refs/heads/master/res/icon.png",
+    "ImageUrls": [
+        "https://raw.githubusercontent.com/frieren14/VisibilityPlugin/refs/heads/master/res/visibility.png"
+    ],
+    "DownloadLinkInstall": "https://github.com/frieren14/VisibilityPlugin/releases/download/v0.1/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/frieren14/VisibilityPlugin/releases/download/v0.1/latest.zip",
+    "DownloadLinkTesting": "https://github.com/frieren14/VisibilityPlugin/releases/download/v0.1/latest.zip"
+}

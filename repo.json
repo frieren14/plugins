@@ -5,7 +5,7 @@
         "Punchline": "Visibility plugin with duty support",
         "Description": "Visibility plugin with duty support",
         "Changelog": "Initial publish",
-        "InternalName": "Visibility",
+        "InternalName": "Visibility+",
         "AssemblyVersion": "1.1.8.3",
         "RepoUrl": "https://github.com/frieren14/VisibilityPlugin",
         "ApplicableVersion": "any",
